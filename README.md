@@ -2,7 +2,10 @@
 
 ## Requirements
 
-git, hg, hg-fast-export
+git, hg, hg-fast-export, dos2unix (and probably some others)
+
+My main development machine is running Linux which is where I wrote and tried this tool.
+I haven't tried running on Windows. It might not work there.
 
 ## Preparations
 
@@ -17,6 +20,7 @@ Run the script passing the name of the repo as well as the URL of the hg repo, e
 
 This will import the commits from Mercurial into git, convert the `.hgignore` file to `.gitignore`,
 and do some cleanup, e.g. adding a `.gitattributes` file and normalizing whitespace and line-endings.
+Closed and inactive branches in Mercurial will be preserved by accordingly named tags.
 
 The conversion will create two subdirectories, one named `hearthis_hg` (for example) that
 contains the Mercurial repo, and another one named `hearthis` that contains the git repo and can
@@ -27,6 +31,12 @@ hg repo. This is useful when the Mercurial will still be used for a while after 
 conversion to git was done. As long as no commits happen on the git repo side (and nothing in
 the mapping etc changed), the conversion can be run again and will only bring in new commits from
 hg (or more accurate: the conversion will produce the same results for previous commits).
+
+After the conversion you can push the git repo to GitHub (after creating a new repo on GitHub):
+
+    git remote add origin git@github.com:sillsdev/hearthis.git
+    git push origin --prune --all
+    git push origin --force --tags
 
 ## authors.txt
 
