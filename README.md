@@ -68,3 +68,7 @@ to check that you didn't miss anything.
 There is a [`authors.txt`](https://docs.google.com/a/sil.org/document/d/1bjOgI5qFDu8Ja_Ign4b6GkLJMf4nkgLe4KYfjCOo7Vk/edit?usp=sharing)
 file uploaded to google doc, editable by everyone within SIL. Please add new entries to this
 file so that it can be shared when importing our other hg repos.
+
+**NOTE:** It is necessary that ever author ends up with a name and email address in git,
+otherwise github will associate the commits of that author with your private email address when
+you push the changes to github!
