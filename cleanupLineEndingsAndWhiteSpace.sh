@@ -130,7 +130,7 @@ add_missing_files()
 		done
 
 		if [ $COMMIT -gt 0 ] ; then
-			git commit -m "Adding .gitattributes and .gitignore files"
+			git commit -m "Adding .gitattributes and .gitignore files" --author="Git Importer <sillsdevgerrit@users.noreply.github.com>"
 		fi
 	done
 }

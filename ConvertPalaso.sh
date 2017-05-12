@@ -4,7 +4,7 @@
 usage()
 {
     exec >&2
-    echo "Usage: $(basename $0) name-of-repo url-of-hg-repo [params for hg-to-git.sh]"
+    echo "Usage: $(basename $0) name-of-repo [url-of-hg-repo [params for hg-to-git.sh]]"
     echo ""
     echo "OPTIONS:"
     echo "  -h, --help                  Display this help"
@@ -29,7 +29,7 @@ abort()
 
 PROGNAME=$(basename "$0")
 PARSEDARGS=$(getopt -n "$PROGNAME" \
-	-o h --long help,add-files-to-hg,no-cleanup \
+	-o h --long help,add-files-to-hg,no-cleanup,no-pull \
 	-- "$@") || usage $?
 eval set -- "$PARSEDARGS"
 
@@ -41,31 +41,32 @@ do
 		-h|--help)           usage ;;
 		--add-files-to-hg)   addMissingFilesToHg=1;;
 		--no-cleanup)        noCleanup=1;;
+		--no-pull)           noPull=1;;
 		--)                  shift; break ;;
 		*) echo "Internal error: option '$1' not handled"; exit 1;;
 	esac
 	shift
 done
 
-if [ $# -ne 2 ]
-then
-	echo "Incorrect number of arguments:" "$@" >&2
-    echo "" >&2
-	usage 1
-fi
-
 NAME=$1
-HGREPO=$2
+
+if [ $# -ne 2 ]; then
+	HGREPO=http://hg.palaso.org/$NAME
+else
+	HGREPO=$2
+fi
 
 DIR=$(dirname $(readlink -e $0))
 WHERE=$(pwd)
 
 
 if [ -d ${NAME}_hg ]; then
-	cd ${NAME}_hg
-	hg pull
-	hg update
-	cd $WHERE
+	if [ -z "$noPull" ]; then
+		cd ${NAME}_hg
+		hg pull
+		hg update
+		cd $WHERE
+	fi
 else
 	hg clone $HGREPO ${NAME}_hg
 fi
